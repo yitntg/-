@@ -1,0 +1,47 @@
+.paymentContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  margin: 0 0 2rem 0;
+  line-height: 1.15;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.form {
+  margin-bottom: 2rem;
+}
+
+.paymentElement {
+  margin-bottom: 2rem;
+}
+
+.paymentElement h2 {
+  margin-bottom: 1rem;
+}
+
+.paymentElement p {
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.backLink a {
+  color: var(--primary-color);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.backLink a:hover {
+  text-decoration: underline;
+} 
