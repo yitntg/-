@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next export",
-    "build-static": "next build && next export",
+    "build-static": "next build",
+    "postbuild-static": "next export",
     "start": "next start"
   },
   "dependencies": {
@@ -22,5 +22,11 @@
   },
   "engines": {
     "node": ">=16.0.0"
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "not ie 11",
+    "not dead",
+    "not op_mini all"
+  ]
 } 
