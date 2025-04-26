@@ -1,0 +1,13 @@
+[build]
+command = "npm install && npm run build"
+output_dir = ".next"
+
+[build.environment]
+NODE_VERSION = "16"
+
+[site]
+bucket = ".next"
+
+[env.production]
+name = "airwallex-payment-system"
+route = "*" 

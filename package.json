@@ -6,12 +6,20 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next build && next export"
   },
   "dependencies": {
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@airwallex/components": "^1.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.38.0",
+    "eslint-config-next": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 } 
