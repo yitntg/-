@@ -1,12 +1,22 @@
+# Cloudflare Pages配置
+name = "airwallex-payment-system"
+
+# 构建配置
 [build]
 command = "npm install && npm run build"
-output_dir = ".next"
 
+# 输出目录
+[build.upload]
+format = "service-worker"
+
+# 构建环境变量
 [build.environment]
 NODE_VERSION = "16"
 
+# Pages特有配置
 [site]
 bucket = ".next"
+pages_build_output_dir = ".next"
 
 [env.production]
 name = "airwallex-payment-system"

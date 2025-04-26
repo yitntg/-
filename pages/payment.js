@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from '../styles/Payment.module.css'
 import { loadAirwallex } from '@airwallex/components'
+import { createPaymentIntent } from '../lib/clientApi'
 
 export default function Payment() {
   const [amount, setAmount] = useState('')
@@ -45,26 +46,11 @@ export default function Payment() {
     setError('');
     
     try {
-      // 创建支付意向
-      const response = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: parseFloat(amount),
-          currency: 'CNY',
-        }),
-      });
+      // 使用客户端API创建支付意向，而不是调用服务器API
+      const paymentIntent = await createPaymentIntent(parseFloat(amount), 'CNY');
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || '创建支付失败');
-      }
-      
-      setPaymentIntentId(data.id);
-      setClientSecret(data.client_secret);
+      setPaymentIntentId(paymentIntent.id);
+      setClientSecret(paymentIntent.client_secret);
       
     } catch (error) {
       console.error('支付错误:', error);

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from '../styles/Checkout.module.css'
 import { loadAirwallex } from '@airwallex/components'
+import { createSubscription } from '../lib/clientApi'
 
 export default function Checkout() {
   const router = useRouter()
@@ -80,28 +81,16 @@ export default function Checkout() {
     setError('');
     
     try {
-      // 创建订阅支付意向
-      const response = await fetch('/api/create-subscription', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          plan,
-          price: parseFloat(price),
-          currency: 'CNY',
-          customer: customerInfo
-        }),
-      });
+      // 使用客户端API创建订阅，而不是调用服务器API
+      const paymentIntent = await createSubscription(
+        plan, 
+        parseFloat(price), 
+        'CNY', 
+        customerInfo
+      );
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || '创建订阅失败');
-      }
-      
-      setPaymentIntentId(data.id);
-      setClientSecret(data.client_secret);
+      setPaymentIntentId(paymentIntent.id);
+      setClientSecret(paymentIntent.client_secret);
       
     } catch (error) {
       console.error('订阅错误:', error);
