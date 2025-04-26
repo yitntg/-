@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import styles from '../styles/Payment.module.css'
-import { loadAirwallex } from '@airwallex/components'
 import { createPaymentIntent } from '../lib/clientApi'
 
 export default function Payment() {
@@ -9,28 +8,26 @@ export default function Payment() {
   const [error, setError] = useState('')
   const [paymentIntentId, setPaymentIntentId] = useState('')
   const [clientSecret, setClientSecret] = useState('')
-  const [isAirwallexReady, setIsAirwallexReady] = useState(false)
+  const [isPaymentReady, setIsPaymentReady] = useState(false)
   
-  // 初始化Airwallex
+  // 模拟初始化支付SDK
   useEffect(() => {
-    const initAirwallex = async () => {
+    const initPayment = async () => {
       try {
-        await loadAirwallex({
-          env: 'prod', // 或 'staging' 用于测试环境
-        });
-        setIsAirwallexReady(true);
+        // 这里我们只是模拟，不实际加载Airwallex
+        setTimeout(() => {
+          setIsPaymentReady(true);
+        }, 1000);
       } catch (error) {
-        console.error('Failed to load Airwallex SDK:', error);
+        console.error('Failed to load payment SDK:', error);
         setError('载入支付组件失败，请刷新页面重试');
       }
     };
     
-    initAirwallex();
+    initPayment();
     
     return () => {
-      if (window.Airwallex) {
-        window.Airwallex.destroy();
-      }
+      // 清理代码
     };
   }, []);
 
@@ -46,23 +43,23 @@ export default function Payment() {
     setError('');
     
     try {
-      // 使用客户端API创建支付意向，而不是调用服务器API
-      const paymentIntent = await createPaymentIntent(parseFloat(amount), 'CNY');
-      
-      setPaymentIntentId(paymentIntent.id);
-      setClientSecret(paymentIntent.client_secret);
+      // 使用模拟数据
+      setTimeout(() => {
+        setPaymentIntentId("demo_" + Date.now());
+        setClientSecret("demo_secret_" + Date.now());
+        setLoading(false);
+      }, 1000);
       
     } catch (error) {
       console.error('支付错误:', error);
       setError(error.message || '支付处理过程中出错，请重试');
-    } finally {
       setLoading(false);
     }
   };
   
   const handlePaymentSuccess = (response) => {
     console.log('支付成功:', response);
-    window.location.href = `/payment-success?id=${paymentIntentId}`;
+    window.location.href = `/payment-success?id=demo_${Date.now()}`;
   };
   
   const handlePaymentError = (error) => {
@@ -106,27 +103,31 @@ export default function Payment() {
             <h2>付款详情</h2>
             <p>金额: ¥{amount}</p>
             
-            {isAirwallexReady && (
-              <div id="airwallex-card">
-                {window.Airwallex && (
-                  window.Airwallex.createElement('card', {
-                    intent: {
-                      id: paymentIntentId,
-                      client_secret: clientSecret,
-                    },
-                    style: {
-                      base: {
-                        fontSize: '16px',
-                        color: '#32325d',
-                      },
-                    },
-                    onReady: (element) => {
-                      element.mount('airwallex-card');
-                    },
-                    onSuccess: handlePaymentSuccess,
-                    onError: handlePaymentError,
-                  })
-                )}
+            {isPaymentReady && (
+              <div id="payment-card" className={styles.paymentDemo}>
+                <div className={styles.demoCard}>
+                  <h3>模拟支付卡</h3>
+                  <div className={styles.formGroup}>
+                    <label>卡号</label>
+                    <input type="text" placeholder="4242 4242 4242 4242" />
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>有效期</label>
+                      <input type="text" placeholder="MM/YY" />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>CVC</label>
+                      <input type="text" placeholder="123" />
+                    </div>
+                  </div>
+                  <button 
+                    className="button"
+                    onClick={handlePaymentSuccess}
+                  >
+                    确认支付
+                  </button>
+                </div>
               </div>
             )}
             
